@@ -1,0 +1,12 @@
+Entities: A/B/C/D:
+
+No limit breaches
+
+Combined sub-entity limit is higher than the parent limit (limit = 100, Combined sub-entity limit = 170).
+
+Entities: E/F:
+
+Limit breach at E (limit = 200, direct utilisation = 150, combined utilisation = 230).
+
+
+

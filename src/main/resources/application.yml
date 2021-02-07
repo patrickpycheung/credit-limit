@@ -1,1 +1,3 @@
-filePath: "src/main/resources/prod-data.csv"
+dataPath: "src/main/resources/prod-data.csv"
+
+reportPath: "src/main/resources/prod-report.txt"

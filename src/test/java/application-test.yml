@@ -1,1 +1,5 @@
-filePath: "src/test/resources/test-data.csv"
+dataPath: "src/test/resources/test-data.csv"
+
+reportPath: "src/test/resources/test-report.txt"
+
+expectedReportPath: "src/test/resources/expected-test-report.txt"
