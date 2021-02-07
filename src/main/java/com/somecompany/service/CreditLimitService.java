@@ -13,15 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.somecompany.model.Entity;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Services related to credit limit.
  * 
  * @author patrick
  */
 @Service
-@Slf4j
 public class CreditLimitService {
 
 	@Value("${reportPath}")
@@ -31,8 +28,9 @@ public class CreditLimitService {
 	 * Generate credit limit report.
 	 * 
 	 * @param dataList
+	 * @throws IOException
 	 */
-	public void generateCreditLimitReport(List<List<String>> dataList) {
+	public void generateCreditLimitReport(List<List<String>> dataList) throws IOException {
 
 		// Key is entity name, value is the entity itself
 		HashMap<String, Entity> entityInfoMap = new HashMap<>();
@@ -113,107 +111,104 @@ public class CreditLimitService {
 
 			Entity currentRootEntity = entityInfoMap.get(currentRootEntityName);
 
-			try {
-				BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(reportPath, true));
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(reportPath, true));
 
-				/* Label */
+			/* Label */
 
-				System.out.print("Entities: ");
-				bufferedWriter.write("Entities: ");
+			System.out.print("Entities: ");
+			bufferedWriter.write("Entities: ");
 
-				List<String> list = currentRootEntity.getListOfSubEntities();
-				list.add(0, currentRootEntityName);
+			List<String> list = currentRootEntity.getListOfSubEntities();
+			list.add(0, currentRootEntityName);
 
-				for (int i = 0; i < list.size(); i++) {
-					// Print the current subEntity
-					System.out.print(list.get(i));
-					bufferedWriter.write(list.get(i));
+			for (int i = 0; i < list.size(); i++) {
+				// Print the current subEntity
+				System.out.print(list.get(i));
+				bufferedWriter.write(list.get(i));
 
-					if (i == list.size() - 1) {
-						// Last subEntity
+				if (i == list.size() - 1) {
+					// Last subEntity
 
-						System.out.print(":");
-						bufferedWriter.write(":");
-					} else {
-						// Not last subEntity
-
-						System.out.print("/");
-						bufferedWriter.write("/");
-					}
-				}
-
-				System.out.println();
-				System.out.println();
-				bufferedWriter.write("\n\n");
-
-				/* Content */
-
-				int totalUtilization = currentRootEntity.getTotalUtilization();
-				int limit = currentRootEntity.getLimit();
-				int utilization = currentRootEntity.getUtilization();
-				int totalLimitOfSubEntities = currentRootEntity.getTotalLimitOfSubEntities();
-
-				// Report on limit breach
-				if (totalUtilization > limit) {
-					// Limit breach
-
-					System.out.print("Limit breach at " + currentRootEntityName);
-					System.out.print(" (");
-					System.out.print("limit = " + limit);
-					System.out.print(", ");
-					System.out.print("direct utilisation = " + utilization);
-					System.out.print(", ");
-					System.out.print("combined utilisation = " + totalUtilization);
-					System.out.print(").");
-
-					bufferedWriter.write("Limit breach at " + currentRootEntityName);
-					bufferedWriter.write(" (");
-					bufferedWriter.write("limit = " + limit);
-					bufferedWriter.write(", ");
-					bufferedWriter.write("direct utilisation = " + utilization);
-					bufferedWriter.write(", ");
-					bufferedWriter.write("combined utilisation = " + totalUtilization);
-					bufferedWriter.write(").");
+					System.out.print(":");
+					bufferedWriter.write(":");
 				} else {
-					// No limit breach
+					// Not last subEntity
 
-					System.out.print("No limit breaches");
-					bufferedWriter.write("No limit breaches");
+					System.out.print("/");
+					bufferedWriter.write("/");
 				}
-
-				System.out.println();
-				System.out.println();
-				bufferedWriter.write("\n\n");
-
-				// Report on where the combined sub-entity limits are higher than the limits at the parent group(s)
-				// (i.e.
-				// limit warning)
-				if (totalLimitOfSubEntities > limit) {
-					// Limit warning
-
-					System.out.print("Combined sub-entity limit is higher than the parent limit");
-					System.out.print(" (");
-					System.out.print("limit = " + limit);
-					System.out.print(", ");
-					System.out.print("Combined sub-entity limit = " + totalLimitOfSubEntities);
-					System.out.print(").");
-
-					bufferedWriter.write("Combined sub-entity limit is higher than the parent limit");
-					bufferedWriter.write(" (");
-					bufferedWriter.write("limit = " + limit);
-					bufferedWriter.write(", ");
-					bufferedWriter.write("Combined sub-entity limit = " + totalLimitOfSubEntities);
-					bufferedWriter.write(").");
-				}
-
-				System.out.println();
-				System.out.println();
-				bufferedWriter.write("\n\n");
-
-				bufferedWriter.close();
-			} catch (IOException e) {
-				log.error("I/O error occurred with file {}", reportPath);
 			}
+
+			System.out.println();
+			System.out.println();
+			bufferedWriter.write("\n\n");
+
+			/* Content */
+
+			int totalUtilization = currentRootEntity.getTotalUtilization();
+			int limit = currentRootEntity.getLimit();
+			int utilization = currentRootEntity.getUtilization();
+			int totalLimitOfSubEntities = currentRootEntity.getTotalLimitOfSubEntities();
+
+			// Report on limit breach
+			if (totalUtilization > limit) {
+				// Limit breach
+
+				System.out.print("Limit breach at " + currentRootEntityName);
+				System.out.print(" (");
+				System.out.print("limit = " + limit);
+				System.out.print(", ");
+				System.out.print("direct utilisation = " + utilization);
+				System.out.print(", ");
+				System.out.print("combined utilisation = " + totalUtilization);
+				System.out.print(").");
+
+				bufferedWriter.write("Limit breach at " + currentRootEntityName);
+				bufferedWriter.write(" (");
+				bufferedWriter.write("limit = " + limit);
+				bufferedWriter.write(", ");
+				bufferedWriter.write("direct utilisation = " + utilization);
+				bufferedWriter.write(", ");
+				bufferedWriter.write("combined utilisation = " + totalUtilization);
+				bufferedWriter.write(").");
+			} else {
+				// No limit breach
+
+				System.out.print("No limit breaches");
+				bufferedWriter.write("No limit breaches");
+			}
+
+			System.out.println();
+			System.out.println();
+			bufferedWriter.write("\n\n");
+
+			// Report on where the combined sub-entity limits are higher than the limits at the parent group(s)
+			// (i.e.
+			// limit warning)
+			if (totalLimitOfSubEntities > limit) {
+				// Limit warning
+
+				System.out.print("Combined sub-entity limit is higher than the parent limit");
+				System.out.print(" (");
+				System.out.print("limit = " + limit);
+				System.out.print(", ");
+				System.out.print("Combined sub-entity limit = " + totalLimitOfSubEntities);
+				System.out.print(").");
+
+				bufferedWriter.write("Combined sub-entity limit is higher than the parent limit");
+				bufferedWriter.write(" (");
+				bufferedWriter.write("limit = " + limit);
+				bufferedWriter.write(", ");
+				bufferedWriter.write("Combined sub-entity limit = " + totalLimitOfSubEntities);
+				bufferedWriter.write(").");
+			}
+
+			System.out.println();
+			System.out.println();
+			bufferedWriter.write("\n\n");
+
+			bufferedWriter.close();
+
 		}
 	}
 }

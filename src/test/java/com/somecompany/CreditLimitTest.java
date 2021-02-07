@@ -42,7 +42,7 @@ public class CreditLimitTest {
 	String expectedReportPath;
 
 	@Test
-	public void shouldBeAbleToReadAFile() {
+	public void shouldBeAbleToReadAFile() throws IOException {
 
 		// Actual result
 		List<List<String>> resultList = utilService.readCSV(dataPath);
@@ -105,7 +105,7 @@ public class CreditLimitTest {
 	}
 
 	@Test
-	public void shouldBeAbleToGenerateCreditLimitReport() {
+	public void shouldBeAbleToGenerateCreditLimitReport() throws IOException {
 
 		// Actual result
 		List<List<String>> dataList = utilService.readCSV(dataPath);

@@ -2,7 +2,6 @@ package com.somecompany.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,15 +11,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Utility services.
  * 
  * @author patrick
  */
 @Service
-@Slf4j
 public class UtilService {
 
 	/**
@@ -28,27 +24,22 @@ public class UtilService {
 	 * 
 	 * @param filePath
 	 * @return List<List<String>>
+	 * @throws IOException
 	 */
-	public List<List<String>> readCSV(String filePath) {
+	public List<List<String>> readCSV(String filePath) throws IOException {
 
 		List<List<String>> dataList = new ArrayList<>();
 
-		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 
-			String line;
+		String line;
 
-			while ((line = bufferedReader.readLine()) != null) {
-				String[] values = line.split(",");
-				dataList.add(Arrays.asList(values));
-			}
-
-			bufferedReader.close();
-		} catch (FileNotFoundException e) {
-			log.error("Failed to read file {}", filePath);
-		} catch (IOException e) {
-			log.error("I/O error occurred with file {}", filePath);
+		while ((line = bufferedReader.readLine()) != null) {
+			String[] values = line.split(",");
+			dataList.add(Arrays.asList(values));
 		}
+
+		bufferedReader.close();
 
 		return dataList;
 	}
@@ -57,14 +48,12 @@ public class UtilService {
 	 * Removes the content of a file.
 	 * 
 	 * @param filePath
+	 * @throws IOException
 	 */
-	public void removeFileContent(String filePath) {
-		try {
-			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath));
-			bufferedWriter.write("");
-			bufferedWriter.close();
-		} catch (IOException e) {
-			log.error("I/O error occurred with file {}", filePath);
-		}
+	public void removeFileContent(String filePath) throws IOException {
+
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath));
+		bufferedWriter.write("");
+		bufferedWriter.close();
 	}
 }
