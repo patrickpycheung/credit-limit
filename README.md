@@ -142,8 +142,6 @@ The operations pertaining to generating credit limit report are grouped in Credi
  * The second loop creates the entity relationships, and performs the required calculations
  * The third loop prints the report
 
-The worst case sceaniro time complexity is O(n^2). This occurs in the second loop, when all the entities are sub-entities in a 1-way relationship (i.e. A > B > C..E > F)
-
 ## **Technology stack**
 
 * Java 8
