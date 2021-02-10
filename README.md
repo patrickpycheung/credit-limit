@@ -41,7 +41,8 @@ The following assumptions are being made for the application:
     * Numeric fields (e.g. limit) contain numbers only
 *  The entity relationship described in the file is valid, e.g. there will not be scenarios like
     * Dead loop, e.g. entity E's parent is F and entity F's parent is E
-* The combined credit limit of each entity group will not exceed the magnitude of 2^31 -1 and hence can be represented by Java Integer type
+* The credit limit and utilization fields are integers
+* The combined credit limit and combined utilization of each entity group will not exceed the magnitude of 2^31 -1 and hence can be represented by Java Integer type
 * In the second requirement for reporting where the combined sub-entity limits are higher than the limits at the parent group(s), the **"parent group"** means the **root entity** of each entity group
 * House-keeping of the generated report is not taken into account
 
